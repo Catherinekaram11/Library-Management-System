@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\controllers",
+    "\\repositories",
+    "\\routes",
+    "\\services"
+  ],
+  "SelectedNode": "\\routes\\bookRouter.js",
+  "PreviewInSolutionExplorer": false
+}
