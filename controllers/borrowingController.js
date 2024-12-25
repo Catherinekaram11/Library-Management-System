@@ -1,4 +1,3 @@
-const req = require("express/lib/request");
 const BorrowingService = require("../services/borrowingService");
 const Joi = require('joi');
 
@@ -58,6 +57,19 @@ const BorrowingController = {
         }
         catch (error){
             return res.status(500).json({ success: false, message: 'Failed to get books.', error: error.message });
+        }
+    },
+
+    ExportOverdueBorrowings: async (req, res) => {
+        try {
+            const filePath =await BorrowingService.ExportLastMonthOverdueBorrowings();
+            res.status(200).json({
+                success: true,
+                message: 'Overdue borrowings exported successfully.',
+                file: filePath
+            });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Failed to export overdue borrowings.', error: error.message });
         }
     }
 };

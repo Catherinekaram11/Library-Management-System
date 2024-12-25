@@ -38,6 +38,18 @@ const BorrowingRepository = {
                   },
             include: [Book]
         });
+    },
+
+    GetPastMonthOverdueBooks: async (date) => {
+        return await Borrowing.findAll({
+            where: {
+                return_date: null,  
+                due_date: {
+                    [Op.lt]: new Date(),  
+                    [Op.gte]: date 
+                }
+            },
+        })
     }
 };
 
