@@ -2,6 +2,7 @@ const BorrowerRepository = require("../repositories/borrowerRepository")
 const BookRepository = require("../repositories/bookRepository");
 const BorrowingRepository = require("../repositories/borrowingRepository");
 const BorrowingStatus = require ("../models/borrowingStatus")
+const exportToCSV = require("../utils/exportUtils");
 
 const BorrowingService = {
     CheckOut: async (borrowingInfo) => {
@@ -70,6 +71,15 @@ const BorrowingService = {
     GetOverdueBooks: async () => {
         const date = new Date();
         return await BorrowingRepository.GetOverdueBooks(date);
+    },
+
+    ExportLastMonthOverdueBorrowings: async () => {
+        const overdueBorrowings = await BorrowingRepository.GetPastMonthOverdueBooks(addMonth(1));
+        if (!overdueBorrowings || overdueBorrowings.length === 0) {
+            throw new Error ('No overdue borrowings found.');
+        }
+        const filePath = await exportToCSV(overdueBorrowings);  
+        return filePath;
     }
 };
 
@@ -78,6 +88,13 @@ const addDays = (days) =>
     const date = new Date();
     date.setDate(date.getDate() + days);
     return date;
+}
+
+const addMonth = (months) =>
+{
+    const MonthAgo = new Date();
+    MonthAgo.setMonth(MonthAgo.getMonth() - months);
+    return MonthAgo;
 }
 
 module.exports = BorrowingService;
